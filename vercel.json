@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "MediLink/package.json",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "dist" }
+      },
+      {
+        "src": "admin/package.json",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "dist" }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/MediLink/(.*)",
+        "dest": "MediLink/$1"
+      },
+      {
+        "src": "/admin/(.*)",
+        "dest": "admin/$1"
+      }
+    ]
+  }

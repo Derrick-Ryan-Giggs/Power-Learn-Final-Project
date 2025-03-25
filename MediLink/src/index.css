@@ -1,0 +1,28 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.speciality-img {
+    filter: brightness(0) saturate(100%) contrast(1.2) hue-rotate(180deg);
+  }
+  
+.active hr{
+    @apply block
+}
+
+*{
+    font-family: Outfit;
+}
+::-webkit-scrollbar{
+    @apply hidden
+}
+
+@media (max-width:740px){
+    .active p{
+        @apply text-white bg-primary
+    }
+}
