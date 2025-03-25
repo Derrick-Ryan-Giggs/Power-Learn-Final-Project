@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            dbName: "MediLink", // ✅ Set the DB name correctly
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-
-        console.log("Database connected successfully");
-    } catch (error) {
-        console.error("Database connection error:", error);
-        process.exit(1);
-    }
+  try {
+    const uri = process.env.MONGODB_URI;
+    console.log("Attempting to connect with URI:", uri); // Add logging
+    
+    await mongoose.connect(uri, {
+      dbName: "MediLink",
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    
+    console.log("Database connected successfully");
+  } catch (error) {
+    console.error("Detailed Database connection error:", {
+      message: error.message,
+      stack: error.stack
+    });
+    process.exit(1);
+  }
 };
 
 export default connectDB;
