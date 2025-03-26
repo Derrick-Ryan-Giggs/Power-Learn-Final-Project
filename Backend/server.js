@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
 import adminRouter from './routes/AdminRoute.js';
@@ -17,6 +18,9 @@ const port = process.env.PORT || 4000;
 // Connect to database & Cloudinary
 connectDB();
 connectCloudinary();
+
+// Define __dirname for ES module compatibility
+const __dirname = path.resolve();
 
 // CORS Configuration
 const allowedOrigins = [
@@ -52,30 +56,37 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', 'true');
 
     if (req.method === 'OPTIONS') {
-        return res.sendStatus(204); // Changed to 204 (No Content) for better preflight handling
+        return res.sendStatus(204); // No Content response for preflight
     }
     next();
 });
 
-// Middlewares
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Support form data
 
 // API Routes
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
-app.use('/api/doctors', doctorRouter);
 app.use('/api/user', userRouter);
+
+// Serve frontend (React build)
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 // Root Route
 app.get('/', (req, res) => {
-    res.status(200).send('API WORKING');
+    res.status(200).json({ success: true, message: 'API WORKING' });
 });
 
 // 404 Route Not Found Middleware
 app.use((req, res) => {
     res.status(404).json({
         success: false,
-        message: 'Route Not Found',
+        message: `Route Not Found: ${req.originalUrl}`
     });
 });
 
@@ -85,14 +96,13 @@ app.use((err, req, res, next) => {
     res.status(500).json({
         success: false,
         message: 'Internal Server Error',
-        error: process.env.NODE_ENV === 'development' ? err.message : {},
+        error: process.env.NODE_ENV === 'development' ? err.message : {}
     });
 });
 
 // Handle Unhandled Promise Rejections
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-    process.exit(1); // Exit gracefully on unhandled rejections
 });
 
 // Start Server
