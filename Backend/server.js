@@ -21,15 +21,11 @@ connnectCloudinary();
 // CORS Configuration with Flexible Origin
 const corsOptions = {
     origin: function (origin, callback) {
-        // List of specific allowed origins
         const specificOrigins = [
             'https://power-learn-final-project-8.vercel.app',
             'https://power-learn-final-project-3.vercel.app'
         ];
-
-        // Allow requests with no origin 
-        // or if the origin is in the specific list
-        if (!origin || specificOrigins.indexOf(origin) !== -1) {
+        if (!origin || specificOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -40,7 +36,8 @@ const corsOptions = {
         'Content-Type', 
         'Authorization',
         'Access-Control-Allow-Credentials',
-        'X-Requested-With'
+        'X-Requested-With',
+        'token'  // ✅ Added `token` header here
     ],
     credentials: true,
     optionsSuccessStatus: 200
@@ -50,8 +47,14 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 
-// Preflight request handler for all routes
-app.options('*', cors(corsOptions));
+// ✅ Preflight request handler for all routes
+app.options('*', (req, res) => {
+    res.set('Access-Control-Allow-Origin', req.headers.origin);
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Credentials, X-Requested-With, token');
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.status(200).end();
+});
 
 // API endpoints
 app.use('/api/admin', adminRouter);
