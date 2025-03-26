@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/mongodb.js';
-import connnectCloudinary from './config/cloudinary.js';
+import connectCloudinary from './config/cloudinary.js';
 import adminRouter from './routes/AdminRoute.js';
 import doctorRouter from './routes/DoctorRoute.js';
 import userRouter from './routes/UserRoute.js';
@@ -14,9 +14,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Connect to database & cloudinary
+// Connect to database & Cloudinary
 connectDB();
-connnectCloudinary();
+connectCloudinary();
 
 // CORS Configuration
 const allowedOrigins = [
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', 'true');
 
     if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
+        return res.sendStatus(204); // Changed to 204 (No Content) for better preflight handling
     }
     next();
 });
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 // Middlewares
 app.use(express.json());
 
-// API endpoints
+// API Routes
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
 app.use('/api/doctors', doctorRouter);
@@ -68,7 +68,15 @@ app.use('/api/user', userRouter);
 
 // Root Route
 app.get('/', (req, res) => {
-    res.send('API WORKING');
+    res.status(200).send('API WORKING');
+});
+
+// 404 Route Not Found Middleware
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Route Not Found',
+    });
 });
 
 // Error Handling Middleware
@@ -77,13 +85,14 @@ app.use((err, req, res, next) => {
     res.status(500).json({
         success: false,
         message: 'Internal Server Error',
-        error: process.env.NODE_ENV === 'development' ? err.message : {}
+        error: process.env.NODE_ENV === 'development' ? err.message : {},
     });
 });
 
 // Handle Unhandled Promise Rejections
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1); // Exit gracefully on unhandled rejections
 });
 
 // Start Server
