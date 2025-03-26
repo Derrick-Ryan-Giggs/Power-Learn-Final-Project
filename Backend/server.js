@@ -20,7 +20,7 @@ connectCloudinary();
 
 // CORS Configuration
 const allowedOrigins = [
-    'https://power-learn-final-project-5.vercel.app',
+    'https://power-learn-final-project-6.vercel.app',
     'https://power-learn-final-project-8.vercel.app',
     'https://power-learn-final-project-3.vercel.app'
 ];
