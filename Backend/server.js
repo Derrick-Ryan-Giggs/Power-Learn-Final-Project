@@ -18,14 +18,16 @@ const port = process.env.PORT || 4000;
 connectDB();
 connnectCloudinary();
 
-// CORS Configuration with Flexible Origin
-const corsOptions = {
+// CORS Configuration
+const allowedOrigins = [
+    'https://power-learn-final-project-8.vercel.app',
+    'https://power-learn-final-project-5.vercel.app',
+    'https://power-learn-final-project-3.vercel.app'
+];
+
+app.use(cors({
     origin: function (origin, callback) {
-        const specificOrigins = [
-            'https://power-learn-final-project-8.vercel.app',
-            'https://power-learn-final-project-3.vercel.app'
-        ];
-        if (!origin || specificOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -35,31 +37,33 @@ const corsOptions = {
     allowedHeaders: [
         'Content-Type', 
         'Authorization',
-        'Access-Control-Allow-Credentials',
         'X-Requested-With',
-        'token'  // ✅ Added `token` header here
+        'Access-Control-Allow-Credentials',
+        'token'
     ],
-    credentials: true,
-    optionsSuccessStatus: 200
-};
+    credentials: true
+}));
+
+// Middleware to manually set headers for OPTIONS preflight
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Access-Control-Allow-Credentials, token');
+    res.header('Access-Control-Allow-Credentials', 'true');
+
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 // Middlewares
 app.use(express.json());
-app.use(cors(corsOptions));
-
-// ✅ Preflight request handler for all routes
-app.options('*', (req, res) => {
-    res.set('Access-Control-Allow-Origin', req.headers.origin);
-    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Credentials, X-Requested-With, token');
-    res.set('Access-Control-Allow-Credentials', 'true');
-    res.status(200).end();
-});
 
 // API endpoints
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
-app.use('/api/doctors', doctorRouter); // Kept for consistency
+app.use('/api/doctors', doctorRouter);
 app.use('/api/user', userRouter);
 
 // Root Route
@@ -67,7 +71,7 @@ app.get('/', (req, res) => {
     res.send('API WORKING');
 });
 
-// Comprehensive Error Handling Middleware
+// Error Handling Middleware
 app.use((err, req, res, next) => {
     console.error('Unexpected Error:', err);
     res.status(500).json({
@@ -77,7 +81,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Unhandled Promise Rejection Handler
+// Handle Unhandled Promise Rejections
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
