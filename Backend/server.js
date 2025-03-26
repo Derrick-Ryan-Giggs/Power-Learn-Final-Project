@@ -18,28 +18,40 @@ const port = process.env.PORT || 4000;
 connectDB();
 connnectCloudinary();
 
-// CORS Configuration
+// CORS Configuration with Flexible Origin
 const corsOptions = {
-   origin: [
-     'http://localhost:5173',  // Frontend dev server
-     'http://localhost:5174',  // Admin dev server
-     'https://power-learn-final-project-3.vercel.app',  // Specific Vercel frontend URL
-     'http://localhost:3000'   // Additional local development server
-   ],
-   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-   allowedHeaders: [
-     'Content-Type', 
-     'Authorization',
-     'Access-Control-Allow-Credentials',
-     'X-Requested-With'
-   ],
-   credentials: true,
-   optionsSuccessStatus: 200
+    origin: function (origin, callback) {
+        // List of specific allowed origins
+        const specificOrigins = [
+            'https://power-learn-final-project-8.vercel.app',
+            'https://power-learn-final-project-3.vercel.app'
+        ];
+
+        // Allow requests with no origin 
+        // or if the origin is in the specific list
+        if (!origin || specificOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: [
+        'Content-Type', 
+        'Authorization',
+        'Access-Control-Allow-Credentials',
+        'X-Requested-With'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
 };
 
 // Middlewares
 app.use(express.json());
 app.use(cors(corsOptions));
+
+// Preflight request handler for all routes
+app.options('*', cors(corsOptions));
 
 // API endpoints
 app.use('/api/admin', adminRouter);
@@ -49,16 +61,25 @@ app.use('/api/user', userRouter);
 
 // Root Route
 app.get('/', (req, res) => {
-   res.send('API WORKING');
+    res.send('API WORKING');
 });
 
-// Error Handling Middleware (optional but recommended)
+// Comprehensive Error Handling Middleware
 app.use((err, req, res, next) => {
-   console.error(err.stack);
-   res.status(500).send('Something broke!');
+    console.error('Unexpected Error:', err);
+    res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: process.env.NODE_ENV === 'development' ? err.message : {}
+    });
+});
+
+// Unhandled Promise Rejection Handler
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 // Start Server
-app.listen(port, () => console.log('Server started on port', port));
+app.listen(port, () => console.log(`Server started on port ${port}`));
 
 export default app;
