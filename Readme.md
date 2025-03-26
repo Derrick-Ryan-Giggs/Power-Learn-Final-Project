@@ -1,6 +1,4 @@
-Here’s the updated README with the correct GitHub repository link included:  
 
----
 
 # MediLink - Medical Doctor Booking Appointment System  
 
