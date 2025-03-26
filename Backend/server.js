@@ -20,22 +20,21 @@ connnectCloudinary();
 
 // CORS Configuration
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',  // Frontend dev server
-    'http://localhost:5174',  // Admin dev server
-    'https://medilink-frontend.vercel.app',  // Replace with your actual Vercel frontend URL
-    'https://medilink-admin.vercel.app',    // Replace with your actual Vercel admin URL
-    '*'  // Temporary, for initial deployment
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'Access-Control-Allow-Credentials',
-    'X-Requested-With'
-  ],
-  credentials: true,
-  optionsSuccessStatus: 200
+   origin: [
+     'http://localhost:5173',  // Frontend dev server
+     'http://localhost:5174',  // Admin dev server
+     'https://power-learn-final-project-3.vercel.app',  // Specific Vercel frontend URL
+     'http://localhost:3000'   // Additional local development server
+   ],
+   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+   allowedHeaders: [
+     'Content-Type', 
+     'Authorization',
+     'Access-Control-Allow-Credentials',
+     'X-Requested-With'
+   ],
+   credentials: true,
+   optionsSuccessStatus: 200
 };
 
 // Middlewares
@@ -45,13 +44,21 @@ app.use(cors(corsOptions));
 // API endpoints
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
-app.use('/api/doctors', doctorRouter); // Keep only this one for consistency
+app.use('/api/doctors', doctorRouter); // Kept for consistency
 app.use('/api/user', userRouter);
 
 // Root Route
 app.get('/', (req, res) => {
-  res.send('API WORKING');
+   res.send('API WORKING');
+});
+
+// Error Handling Middleware (optional but recommended)
+app.use((err, req, res, next) => {
+   console.error(err.stack);
+   res.status(500).send('Something broke!');
 });
 
 // Start Server
 app.listen(port, () => console.log('Server started on port', port));
+
+export default app;
