@@ -1,26 +1,48 @@
-import React from 'react'
-import { useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AppContext } from '../Context/AppContext'
+import axios from 'axios'
 
 const TopDoctors = () => {
   const navigate = useNavigate()
-  const {doctors} = useContext(AppContext)
-  
+  const [doctors, setDoctors] = useState([])
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/doctor/list`)
+        setDoctors(response.data)
+        setLoading(false)
+      } catch (err) {
+        console.error('Error fetching doctors:', err)
+        setError('Failed to fetch doctors')
+        setLoading(false)
+      }
+    }
+
+    fetchDoctors()
+  }, [])
+
+  if (loading) return <div>Loading doctors...</div>
+  if (error) return <div>Error: {error}</div>
+
   return (
     <div className='flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10'>
       <h1 className='text-3xl font-medium'>Top Doctors to Book</h1>
       <p className='sm:w-1/3 text-center text-sm'>Simply Browse Through our Extensive List of Trusted Doctors</p>
       <div className='w-full grid grid-cols-auto gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
         {doctors.slice(0, 12).map((item) => (
-          <div 
+          <div
             key={item._id}
-            onClick={()=>{navigate(`/appointment/${item._id}`);scrollTo(0,0)}} 
-            className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 '>
-            <img className='bg-blue-50' src={item.image} alt="" />
+            onClick={() => { navigate(`/appointment/${item._id}`); window.scrollTo(0, 0) }}
+            className='border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 '
+          >
+            <img className='bg-blue-50' src={item.image} alt={item.name} />
             <div className='p-4'>
-              <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500': 'text-gray-400'} `}>
-                <p className={`w-2 h-2 ${item.available ? ' bg-green-500' :'bg-gray-500'} rounded-full`}></p><p>{item.available ? 'Available' : 'Not Available'}</p>
+              <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500' : 'text-gray-400'} `}>
+                <p className={`w-2 h-2 ${item.available ? ' bg-green-500' : 'bg-gray-500'} rounded-full`}></p>
+                <p>{item.available ? 'Available' : 'Not Available'}</p>
               </div>
               <p className='text-gray-900 text text-lg font-medium'>{item.name}</p>
               <p className='text-gray-600 text-sm'>{item.speciality}</p>
@@ -28,7 +50,12 @@ const TopDoctors = () => {
           </div>
         ))}
       </div>
-      <button onClick={()=> {navigate('/doctors');scrollTo(0,0)}} className='bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10'>More</button>
+      <button 
+        onClick={() => { navigate('/doctors'); window.scrollTo(0, 0) }} 
+        className='bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10'
+      >
+        More
+      </button>
     </div>
   )
 }
