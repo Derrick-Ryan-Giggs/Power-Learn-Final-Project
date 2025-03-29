@@ -27,29 +27,29 @@ MediLink is a medical appointment booking system designed to simplify the proces
 ## 📸 Project Screenshots
 
 ### MediLink Patient Portal
-![Patient Login Page](/path/to/patient-login.png)
+![Patient Login Page](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265067/Screenshot_at_2025-03-29_19-05-05_wiq5jg.png)
 *Patient login interface with secure authentication*
 
-![Doctor Search](/path/to/doctor-search.png)
+![Doctor Search](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265070/Screenshot_at_2025-03-29_19-06-31_qsg7vs.png)
 *Doctor search and filtering functionality*
 
-![Appointment Booking](/path/to/appointment-booking.png)
+![Appointment Booking](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265077/Screenshot_at_2025-03-29_19-08-18_lttowm.png)
 *Intuitive appointment scheduling interface*
 
-![Patient Dashboard](/path/to/patient-dashboard.png)
+![Patient Dashboard](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265085/Screenshot_at_2025-03-29_17-05-58_qzltz5.png)
 *Patient dashboard showing upcoming appointments*
 
 ### Admin & Doctor Dashboard
-![Admin Login](/path/to/admin-login.png)
+![Admin Login](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265914/Screenshot_at_2025-03-29_19-31-00_xgllbp.png)
 *Secure admin authentication portal*
 
-![Doctor Management](/path/to/doctor-management.png)
+![Doctor Management](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265096/Screenshot_at_2025-03-29_17-04-28_y3xdck.png)
 *Admin interface for managing doctor profiles*
 
-![Appointment Overview](/path/to/appointment-overview.png)
+![Appointment Overview](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265086/Screenshot_at_2025-03-29_17-05-45_hwjr96.png)
 *Comprehensive appointment management system*
 
-![Doctor Schedule](/path/to/doctor-schedule.png)
+![Doctor Schedule](https://res.cloudinary.com/dljyip1ey/image/upload/v1743265066/Screenshot_at_2025-03-29_19-14-10_tvluac.png)
 *Doctor's interface for managing availability*
 
 ## 🛠 Tech Stack  
