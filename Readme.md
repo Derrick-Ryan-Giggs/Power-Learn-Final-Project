@@ -1,5 +1,3 @@
-
-
 # MediLink - Medical Doctor Booking Appointment System  
 
 ## 🏥 Project Overview  
@@ -25,6 +23,34 @@ MediLink is a medical appointment booking system designed to simplify the proces
 - User and doctor management  
 - Appointment oversight  
 - System configuration  
+
+## 📸 Project Screenshots
+
+### MediLink Patient Portal
+![Patient Login Page](/path/to/patient-login.png)
+*Patient login interface with secure authentication*
+
+![Doctor Search](/path/to/doctor-search.png)
+*Doctor search and filtering functionality*
+
+![Appointment Booking](/path/to/appointment-booking.png)
+*Intuitive appointment scheduling interface*
+
+![Patient Dashboard](/path/to/patient-dashboard.png)
+*Patient dashboard showing upcoming appointments*
+
+### Admin & Doctor Dashboard
+![Admin Login](/path/to/admin-login.png)
+*Secure admin authentication portal*
+
+![Doctor Management](/path/to/doctor-management.png)
+*Admin interface for managing doctor profiles*
+
+![Appointment Overview](/path/to/appointment-overview.png)
+*Comprehensive appointment management system*
+
+![Doctor Schedule](/path/to/doctor-schedule.png)
+*Doctor's interface for managing availability*
 
 ## 🛠 Tech Stack  
 
@@ -200,7 +226,4 @@ Project Repository: [GitHub](https://github.com/Derrick-Ryan-Giggs/Power-Learn-F
 - Node.js  
 - Express  
 - MongoDB  
-- Cloudinary  
-
-
-
+- Cloudinary
