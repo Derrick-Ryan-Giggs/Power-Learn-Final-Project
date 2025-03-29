@@ -40,7 +40,9 @@ app.use(cors({
         'X-Requested-With',
         'Access-Control-Allow-Credentials',
         'token',
-        'atoken'  // Added atoken header
+        'atoken',
+        'dtoken',  // Added dtoken header
+        'utoken'   // Added utoken in case you need it for user routes
     ],
     credentials: true
 }));
@@ -49,7 +51,7 @@ app.use(cors({
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Access-Control-Allow-Credentials, token, atoken');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Access-Control-Allow-Credentials, token, atoken, dtoken, utoken');
     res.header('Access-Control-Allow-Credentials', 'true');
     
     if (req.method === 'OPTIONS') {
